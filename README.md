@@ -17,7 +17,7 @@ if (is_null($res)) {
 }
 ```
 
-case2
+case2 
 
 ```php
 // Option
@@ -29,7 +29,7 @@ Some($_POST['hello'])->unwrapOr("hi"); // hello
 // ... but we have $_POST["hello"]??"hi" 2333
 ```
 
-Case3
+Case3 
 
 ```php
 // scenario
