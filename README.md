@@ -44,7 +44,7 @@ $obj->attr = null; // attr is Object;
 
 // None
 $attr = Some($obj->attr)->andThen(function($attr){
-	return "";
+	return "Some Data";
 })->unwrapOr("no success");
 
 //Some
