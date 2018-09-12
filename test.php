@@ -59,3 +59,8 @@ echo "result:" . Some("msg")->expect(new LogicException("got null")) . PHP_EOL;
 
 echo "====== test null expect ======\n";
 //echo "will be throw exception" . Some(null)->expect(new LogicException("got null"));
+
+echo $attr = Some(1)->andThen(function($attr){
+    return null;
+})->unwrapOr("no success");
+

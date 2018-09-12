@@ -62,7 +62,7 @@ class Some extends Option
 
     public function mapOrElse(callable $default, callable $call)
     {
-        return call_user_func($default);
+        return call_user_func($call, $this->val);
     }
 
     public function unwrapOrElse(callable $call)

@@ -54,6 +54,7 @@ abstract class Option
     abstract public function expect(\Exception $e);
 
     /**
+     * invoke and return $call(this.val)
      * @param callable $call
      * @return Option
      */
