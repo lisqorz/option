@@ -1,43 +1,50 @@
-# Option
+<?php
+/**
+ * Created by PhpStorm.
+ * User: lsq
+ * Date: 2018/9/13
+ * Time: 上午11:58
+ */
+require_once "../src/Option.php";
 
 
-case 0 
+$db = array(
+    'host' => '127.0.0.1',
+    'port' => '3306',
+    'dbname' => 'test',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8',
+    'dsn' => 'mysql:host=127.0.0.1;dbname=test;port=3306;charset=utf8',
+);
 
-```php
-Native
+//连接
+$options = array(
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+);
+
 try {
     $pdo = new PDO($db['dsn'], $db['username'], $db['password'], $options);
 } catch (PDOException $e) {
-    throw new PDOException('数据库连接失败:' . $e->getMessage());
-}
-```
+    die('数据库连接失败:' . $e->getMessage());
 
-```php 
-Option
+}
 /** @var PDO $conn */
 Some(!$pdo->errorCode())->expect(new PDOException("数据库链接失败" . $pdo->errorCode()));
-```
 
-```php 
-Native
 $statement = $pdo->query("select count(id) from link");
 $cnt = 0;
 if (!$statement) {
     $cnt = $statement->rowCount();
 }
-```
 
-```php 
-Option
 $cnt = Some($pdo->query("select count(id) from link"))->andThen(function ($statement) {
     return $statement->rowCount();
 })->unwrapOr(0);
 
 print_r($cnt);
-```
 
-```php 
-Native
 $query = $pdo->query("select id,name from link");
 $result = [];
 
@@ -52,10 +59,6 @@ if ($query) {
         }
     }
 }
-```
-
-```php 
-Option
 $result = Some($pdo->query("select id,name from link"))->andThen(function ($state) {
     return $state->fetchAll();
 })->filter(function ($item) {
@@ -66,68 +69,3 @@ $result = Some($pdo->query("select id,name from link"))->andThen(function ($stat
 })->unwrapOr([]);
 
 print_r($result);
-```
-
-case 1
-
-```php
-// Option
-$res = Some($db->get())->expect(new \Exception("msg"));
-```
-
-```php
-// native
-$res = $db->get();
-if (is_null($res)) {
-    throw new \Exception("msg");
-}
-```
-
-case2 
-
-```php
-// Option
-$_POST["hello"] = null;
-Some($_POST['hello'])->unwrapOr("hi"); // hi
-$_POST["hello"] = "hello";
-Some($_POST['hello'])->unwrapOr("hi"); // hello
-
-// ... but we have $_POST["hello"]??"hi" 2333
-```
-
-Case3 
-
-```php
-// scenario
-$obj = new Obj();
-$obj->attr = null; // attr is Object;
-```
-
-
-
-```php
-// Option
-
-// None
-$attr = Some($obj->attr)->andThen(function($attr){
-	return "Some Data";
-})->unwrapOr("no success");
-
-//Some
-$attr = Some(1)->andThen(function($attr){
-    return null;
-})->unwrapOr("no success");
-
-```
-
-```php
-// native
-$attr = "no success";
-if ($obj->attr) {
-   $attr = (function($attr){return ""; })()
-}
-if (!$attr) {
-    $attr = "no success";
-}
-```
-

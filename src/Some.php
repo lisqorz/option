@@ -19,7 +19,7 @@ class Some extends Option
         if ($val instanceof None) {
             return $val;
         }
-        if (!is_null($val)) {
+        if (!is_null($val) || false !== $val) {
             return new self($val);
         }
         return None::new();
